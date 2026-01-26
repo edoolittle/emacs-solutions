@@ -1,2 +1,2 @@
 # emacs-solutions
-Solutions to a wide variety fo emacs problems, issues, and extensions
+Solutions to a wide variety of emacs problems, issues, and extensions

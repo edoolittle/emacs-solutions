@@ -15,11 +15,13 @@
   (lambda ()
     (interactive)
     (shell-command-to-string "xdotool getactivewindow windowsize 100% 100% && xdotool getactivewindow windowmove 0 0")))
+;; xdotool sometimes errs in the height of a window (by the height of the
+;; Windows 11 title bar, perhaps) ... 97% below compensates on my system
 (global-set-key (kbd "s-<left>") 
   (lambda ()
     (interactive)
-    (shell-command-to-string "xdotool getactivewindow windowsize 50% 100% && xdotool getactivewindow windowmove 0 0")))
+    (shell-command-to-string "xdotool getactivewindow windowsize 50% 97% && xdotool getactivewindow windowmove 0 0")))
 (global-set-key (kbd "s-<right>") 
   (lambda ()
     (interactive)
-    (shell-command-to-string "xdotool getactivewindow windowsize 50% 100% && xdotool getactivewindow windowmove 50% 0")))
+    (shell-command-to-string "xdotool getactivewindow windowsize 50% 97% && xdotool getactivewindow windowmove 50% 0")))

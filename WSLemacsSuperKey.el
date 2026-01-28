@@ -11,3 +11,7 @@
   (lambda ()
     (interactive)
     (shell-command-to-string "xdotool getactivewindow windowminimize")))
+(global-set-key (kbd "s-<up>") 
+  (lambda ()
+    (interactive)
+    (shell-command-to-string "xdotool getactivewindow windowsize 100% 100% && xdotool getactivewindow windowmove 0 0")))

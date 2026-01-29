@@ -61,7 +61,7 @@ emacs_OnSuper(ThisHotkey, options := "I1 L0 *")
         if !InStr(wgt, "GNU Emacs")
             {
 	    Send(UD = "Up" ? key : "{LWin down}" key "{LWin up}")
-	    ih.Stop()
+	    /* ih.Stop() */
 	    }
         else Send(UD = "Up" ? key : "{F9}" key)
     }

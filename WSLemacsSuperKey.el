@@ -11,12 +11,12 @@
   (lambda ()
     (interactive)
     (shell-command-to-string "xdotool getactivewindow windowminimize")))
+;; in Windows 11, xdotool miscalculates height (by the height of the
+;; Windows title bar, I think)
 (global-set-key (kbd "s-<up>") 
   (lambda ()
     (interactive)
-    (shell-command-to-string "xdotool getactivewindow windowsize 100% 100% && xdotool getactivewindow windowmove 0 0")))
-;; xdotool sometimes errs in the height of a window (by the height of the
-;; Windows 11 title bar, perhaps) ... 97% below compensates on my system
+    (shell-command-to-string "xdotool getactivewindow windowsize 100% 97% && xdotool getactivewindow windowmove 0 0")))
 (global-set-key (kbd "s-<left>") 
   (lambda ()
     (interactive)

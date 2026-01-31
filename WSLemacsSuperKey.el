@@ -1,5 +1,5 @@
 ;; emacs support to complement WSLemacsSuperKey.ahk
-;; add this fragment to init.el
+;; add this fragment to init.el or similar startup file
 
 (setq frame-title-format "%b (GNU Emacs)")
 (define-key function-key-map (kbd "<f9>") 'event-apply-super-modifier)

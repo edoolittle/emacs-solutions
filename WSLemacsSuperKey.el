@@ -1,4 +1,4 @@
-;; emacs support to complement WSLemacSuperKey.ahk
+;; emacs support to complement WSLemacsSuperKey.ahk
 ;; add this fragment to init.el
 
 (setq frame-title-format "%b (GNU Emacs)")
@@ -11,17 +11,20 @@
   (lambda ()
     (interactive)
     (shell-command-to-string "xdotool getactivewindow windowminimize")))
-;; in Windows 11, xdotool miscalculates height (by the height of the
-;; Windows title bar, I think)
+;; xdotool miscalculates height (by the height of the Windows title bar, I think)
 (global-set-key (kbd "s-<up>") 
   (lambda ()
     (interactive)
-    (shell-command-to-string "xdotool getactivewindow windowsize 100% 97% && xdotool getactivewindow windowmove 0 0")))
+    (shell-command-to-string "xdotool getactivewindow windowsize 100% 97% windowmove 0 0")))
 (global-set-key (kbd "s-<left>") 
   (lambda ()
     (interactive)
-    (shell-command-to-string "xdotool getactivewindow windowsize 50% 97% && xdotool getactivewindow windowmove 0 0")))
+    (shell-command-to-string "xdotool getactivewindow windowsize 50% 97% windowmove 0 0")))
 (global-set-key (kbd "s-<right>") 
   (lambda ()
     (interactive)
-    (shell-command-to-string "xdotool getactivewindow windowsize 50% 97% && xdotool getactivewindow windowmove 50% 0")))
+    (shell-command-to-string "xdotool getactivewindow windowsize 50% 97% windowmove 50% 0%")))
+(global-set-key (kbd "s-<right>") 
+  (lambda ()
+    (interactive)
+    (shell-command-to-string "xdotool getactivewindow windowsize 50% 97% windowmove 50% 0%")))

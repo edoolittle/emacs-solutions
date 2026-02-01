@@ -15,8 +15,11 @@
 ;; used in Windows.  (I have my windows key mapped to super, but in some
 ;; cases I want it to continue to behave as it does in Windows.
 
-(global-set-key (kbd "s-<down>") 
-  (lambda ()
-    (interactive)
-    (shell-command-to-string "xdotool getactivewindow windowminimize")))
+;; with my new SimpleSuperKey.ahk, the below is redundant ... Windows does
+;; the right thing if I pass Win-<down> on to the operating system
+
+;(global-set-key (kbd "s-<down>") 
+;  (lambda ()
+;    (interactive)
+;    (shell-command-to-string "xdotool getactivewindow windowminimize")))
 

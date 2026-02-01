@@ -34,12 +34,29 @@ $#u::
     else Send("#u")
 }
 
+;; For emoji panel ... Windows emoji panel not available in Ubuntu
+
+$#.::
+{
+    if WinExist("A") && InStr(WinGetTitle("A"), emacsTitle, true)
+        Send("{F9}.")
+    else Send("#.")
+}
+
+
+
 ;; Hyper key remappings CapsLock -> F8
+
 ;; These can be slightly simpler because there is no need to forward
 ;; unremapped hyper keys to the operating system ... we don't need $
 ;; prefix for one thing.
+
 ;; However, following the above, we can overload behaviour based on
 ;; whether emacs is running or not ... possible to do so but maybe
 ;; not advised.
 
 CapsLock & i::Send("{F8}i")
+
+;; I have reserved some Ctrl+Win+Alt combinations for some Windows
+;; programs that appear to tie into the input at a low level, so
+;; they don't really get the Hyper key combinations.

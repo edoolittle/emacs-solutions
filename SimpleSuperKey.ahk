@@ -14,11 +14,17 @@ SetCapsLockState("AlwaysOff")
 ;; Super key remappings Winkey -> F9 for emacs
 ;; Note: #L cannot be remapped ... it is always interpreted by Windows as lock screen
 
-$#i::
+$#i:: ;; win-i
 {
     if WinExist("A") && InStr(WinGetTitle("A"), emacsTitle, true)
         Send("{F9}i")
     else Send("#i")
+}
+$#!i:: ;; alt-win-i
+{
+    if WinExist("A") && InStr(WinGetTitle("A"), emacsTitle, true)
+        Send("{F9}!i")
+    else Send("#!i")
 }
 
 $#u::

@@ -20,14 +20,26 @@ $#i:: ;; win-i
         Send("{F9}i")
     else Send("#i")
 }
+
 $#!i:: ;; alt-win-i
 {
     if WinExist("A") && InStr(WinGetTitle("A"), emacsTitle, true)
-        Send("{F9}!i")
+        Send("{F9}!i") 
     else Send("#!i")
 }
 
-$#u::
+;; win-m is bound to minimize window in Windows 11, which I want to keep
+
+;; alt-win-m is permanently bound to gaming console stuff, can't use it
+
+$#^m:: ;; win-ctrl-m
+{
+    if WinExist("A") && InStr(WinGetTitle("A"), emacsTitle, true)
+        Send("{F9}^m") 
+    else Send("#^m")
+}
+
+$#u:: ;; win-u
 {
     if WinExist("A") && InStr(WinGetTitle("A"), emacsTitle, true)
         Send("{F9}u")

@@ -40,8 +40,12 @@ else
         emacsclient -u -c -n -e "(let ((b (create-file-buffer \"*stdin*\"))) (switch-to-buffer b) (insert-file-contents \"${TMP}\") (delete-file \"${TMP}\"))"
     elif [ $# -eq 2 ]; then
  	    emacsclient -u -c -n -e "(split-window-2-files \"$1\" \"$2\")"
+    elif [ $# -eq 1]; then
+	    emacsclient -u -c -n "$1"
     else
-	    emacsclient -u -c -n "$@"
+        # when opening a bunch of files with emacsclient don't -n;
+        # wait until each file is marked as done with C-x #
+	    emacsclient -u -c "$@"
     fi
 	osascript -e 'tell application "System Events" to click UI element "EmacsMac" of list 1 of application process "Dock"' > /dev/null 2>&1
 fi

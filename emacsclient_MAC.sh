@@ -40,7 +40,7 @@ else
         emacsclient -u -c -n -e "(let ((b (create-file-buffer \"*stdin*\"))) (switch-to-buffer b) (insert-file-contents \"${TMP}\") (delete-file \"${TMP}\"))"
     elif [ $# -eq 2 ]; then
  	    emacsclient -u -c -n -e "(split-window-2-files \"$1\" \"$2\")"
-    elif [ $# -eq 1]; then
+    elif [ $# -eq 1 ]; then
 	    emacsclient -u -c -n "$1"
     else
         # when opening a bunch of files with emacsclient don't -n;

@@ -49,7 +49,7 @@ else
     elif [ $# -eq 2 ]; then
  	    emacsclient -u -c -n -e "(split-window-2-files \"$1\" \"$2\")"
         nircmd.exe win activate stitle "${2}(GNU Emacs)"
-    elif [ $# -eq 1]; then
+    elif [ $# -eq 1 ]; then
 	    emacsclient -u -c -n "$1"
         nircmd.exe win activate stitle "${1}(GNU Emacs)"        
     else

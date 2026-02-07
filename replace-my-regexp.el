@@ -1,0 +1,5 @@
+(defun f/replace-my-regexp (a b)
+  (goto-char (point-min))
+  (while (re-search-forward a nil t)
+    (replace-match b))
+  (buffer-substring-no-properties (point-min) (point-max)))

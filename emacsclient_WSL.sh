@@ -10,7 +10,14 @@
 # your emacs app is in the list in the if statement immediately
 # below
 #
-# Also, install nircmd.exe in your path
+# Also, install nircmd.exe in your path and
+# Adjust the stitle strings below, OR (better) add this fragment
+# to your init.el file:
+# (setq frame-title-format "%b (GNU Emacs)")
+# WARNING: if there are multiple files open in emacs with the same name
+# nircmd may pick the wrong one!
+# We should keep looking for a better solution to this problem.
+
 
 
 #MY_EMACS='/usr/bin/emacs-w32'

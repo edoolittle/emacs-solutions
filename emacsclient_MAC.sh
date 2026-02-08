@@ -10,7 +10,9 @@
 # your emacs app is in the list in the if statement immediately
 # below
 #
-# Also, install nircmd.exe in your path
+
+# TODO: when invoked from less, the line number is included in the call
+# to EDITOR.  We should really parse that line number.
 
 
 MY_EMACS="/Applications/MacPorts/EmacsMac.app/Contents/MacOS/Emacs"
@@ -25,11 +27,11 @@ if ! emacsclient -a /bin/false -e '()' > /dev/null 2>&1; then
     if [[ "$1" == "-" ]]; then
         TMP="$(mktemp /tmp/emacsstdinXXX)";
         cat >"$TMP";
-       	$MY_EMACS --eval "(let ((b (create-file-buffer \"*stdin*\"))) (switch-to-buffer b) (insert-file-contents \"${TMP}\") (delete-file \"${TMP}\"))" &
+       	nohup $MY_EMACS --eval "(let ((b (create-file-buffer \"*stdin*\"))) (switch-to-buffer b) (insert-file-contents \"${TMP}\") (delete-file \"${TMP}\"))" > /dev/null 2>&1 &
     elif [ $# -eq 2 ]; then
-	    $MY_EMACS -e "(split-window-2-files \"$1\" \"$2\")" > /dev/null 2>&1 
+	    nohup $MY_EMACS -e "(split-window-2-files \"$1\" \"$2\")" > /dev/null 2>&1 &
     else
-	    $MY_EMACS "$@" &
+	    nohup $MY_EMACS "$@" > /dev/null 2>&1 &
     fi
 	sleep 2
 	osascript -e 'tell application "System Events" to click UI element "EmacsMac" of list 1 of application process "Dock"' > /dev/null 2>&1

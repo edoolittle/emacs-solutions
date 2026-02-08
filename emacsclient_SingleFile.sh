@@ -32,10 +32,10 @@ MY_EMACS='emacs'
 if ! emacsclient -a /bin/false -e '()' > /dev/null 2>&1; then
     if [ $# -eq 2 ]; then
         # the first argument is a line number +...
-	    $MY_EMACS "$@" &
+	    nohup $MY_EMACS "$@" > /dev/null 2>&1 &
         nircmd.exe win activate stitle "(GNU Emacs) ${2}"
     else
-        $MY_EMACS "$@"
+        nohup $MY_EMACS "$@" > /dev/null 2>&1 &
         nircmd.exe win activate stitle "${1}(GNU Emacs)"
     fi
 

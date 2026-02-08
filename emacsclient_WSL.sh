@@ -13,12 +13,13 @@
 # Also, install nircmd.exe in your path and
 # Adjust the stitle strings below, OR (better) add this fragment
 # to your init.el file:
-# (setq frame-title-format "%b (GNU Emacs)")
+# (setq frame-title-format "(GNU Emacs) %b")
 # WARNING: if there are multiple files open in emacs with the same name
-# nircmd may pick the wrong one!
+# nircmd may pick the wrong one!  This is mitigated by putting the
+# filename second, so nircmd opens raises every window with the same name.
 # We should keep looking for a better solution to this problem.
 
-
+# TODO This script assumes line numbers are not on the command line
 
 #MY_EMACS='/usr/bin/emacs-w32'
 MY_EMACS='emacs'
@@ -31,14 +32,14 @@ if ! emacsclient -a /bin/false -e '()' > /dev/null 2>&1; then
     if [[ "$1" == "-" ]]; then
         TMP="$(mktemp /tmp/emacsstdinXXX)";
         cat >"$TMP";
-       	$MY_EMACS --eval "(let ((b (create-file-buffer \"*stdin*\"))) (switch-to-buffer b) (insert-file-contents \"${TMP}\") (delete-file \"${TMP}\"))" &
+       	nohup $MY_EMACS --eval "(let ((b (create-file-buffer \"*stdin*\"))) (switch-to-buffer b) (insert-file-contents \"${TMP}\") (delete-file \"${TMP}\"))" > /dev/null 2>&1 &
         nircmd.exe win activate stitle "\*stdin\*"
     elif [ $# -eq 2 ]; then
-	    $MY_EMACS -e "(split-window-2-files \"$1\" \"$2\")" > /dev/null 2>&1 
-        nircmd.exe win activate stitle "${2}(GNU Emacs)"
+	    nohup $MY_EMACS -e "(split-window-2-files \"$1\" \"$2\")" > /dev/null 2>&1 &
+        nircmd.exe win activate stitle "(GNU Emacs) ${2}"
     else
-	    $MY_EMACS "$@" &
-        nircmd.exe win activate stitle "${1}(GNU Emacs)"
+	    nohup $MY_EMACS "$@" > /dev/null 2>&1 &
+        nircmd.exe win activate stitle "(GNU Emacs) ${1}"
     fi
 else
     if [[ "$1" == "-" ]]; then
@@ -48,15 +49,15 @@ else
         nircmd.exe win activate stitle "\*stdin\*"
     elif [ $# -eq 2 ]; then
  	    emacsclient -u -c -n -e "(split-window-2-files \"$1\" \"$2\")"
-        nircmd.exe win activate stitle "${2}(GNU Emacs)"
+        nircmd.exe win activate stitle "(GNU Emacs) ${2})"
     elif [ $# -eq 1 ]; then
 	    emacsclient -u -c -n "$1"
-        nircmd.exe win activate stitle "${1}(GNU Emacs)"        
+        nircmd.exe win activate stitle "(GNU Emacs) ${1}"        
     else
         # when opening a bunch of files with emacsclient don't -n;
         # wait until each file is marked as done with C-x #
 	    emacsclient -u -c "$@"
-        nircmd.exe win activate stitle "${1}(GNU Emacs)"
+        nircmd.exe win activate stitle "(GNU Emacs) ${1}"
     fi
 fi
 

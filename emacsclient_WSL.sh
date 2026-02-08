@@ -14,6 +14,8 @@
 # Adjust the stitle strings below, OR (better) add this fragment
 # to your init.el file:
 # (setq frame-title-format "(GNU Emacs) %b")
+# You want it to be the other way around if your unique filenames start
+# with dir/filename instead of the default filename<dir>
 # WARNING: if there are multiple files open in emacs with the same name
 # nircmd may pick the wrong one!  This is mitigated by putting the
 # filename second, so nircmd opens raises every window with the same name.
@@ -36,10 +38,10 @@ if ! emacsclient -a /bin/false -e '()' > /dev/null 2>&1; then
         nircmd.exe win activate stitle "\*stdin\*"
     elif [ $# -eq 2 ]; then
 	    nohup $MY_EMACS -e "(split-window-2-files \"$1\" \"$2\")" > /dev/null 2>&1 &
-        nircmd.exe win activate stitle "(GNU Emacs) ${2}"
+        nircmd.exe win activate stitle "(GNU Emacs) `basename ${2}`"
     else
 	    nohup $MY_EMACS "$@" > /dev/null 2>&1 &
-        nircmd.exe win activate stitle "(GNU Emacs) ${1}"
+        nircmd.exe win activate stitle "(GNU Emacs) `basename ${1}`"
     fi
 else
     if [[ "$1" == "-" ]]; then
@@ -49,15 +51,15 @@ else
         nircmd.exe win activate stitle "\*stdin\*"
     elif [ $# -eq 2 ]; then
  	    emacsclient -u -c -n -e "(split-window-2-files \"$1\" \"$2\")"
-        nircmd.exe win activate stitle "(GNU Emacs) ${2})"
+        nircmd.exe win activate stitle "(GNU Emacs) `basename ${2}`)"
     elif [ $# -eq 1 ]; then
 	    emacsclient -u -c -n "$1"
-        nircmd.exe win activate stitle "(GNU Emacs) ${1}"        
+        nircmd.exe win activate stitle "(GNU Emacs) `basename ${1}`"        
     else
         # when opening a bunch of files with emacsclient don't -n;
         # wait until each file is marked as done with C-x #
 	    emacsclient -u -c "$@"
-        nircmd.exe win activate stitle "(GNU Emacs) ${1}"
+        nircmd.exe win activate stitle "(GNU Emacs) `basename ${1}`"
     fi
 fi
 

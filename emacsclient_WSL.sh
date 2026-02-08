@@ -35,10 +35,8 @@ if ! emacsclient -a /bin/false -e '()' > /dev/null 2>&1; then
         TMP="$(mktemp /tmp/emacsstdinXXX)";
         cat >"$TMP";
        	nohup $MY_EMACS --eval "(let ((b (create-file-buffer \"*stdin*\"))) (switch-to-buffer b) (insert-file-contents \"${TMP}\") (delete-file \"${TMP}\"))" > /dev/null 2>&1 &
-        nircmd.exe win activate stitle "\*stdin\*"
     elif [ $# -eq 2 ]; then
 	    nohup $MY_EMACS -e "(split-window-2-files \"$1\" \"$2\")" > /dev/null 2>&1 &
-        nircmd.exe win activate stitle "(GNU Emacs) `basename ${2}`"
     else
 	    nohup $MY_EMACS "$@" > /dev/null 2>&1 &
     fi

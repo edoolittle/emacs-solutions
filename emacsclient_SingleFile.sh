@@ -35,10 +35,10 @@ if ! emacsclient -a /bin/false -e '()' > /dev/null 2>&1; then
     if [ $# -eq 2 ]; then
         # the first argument is a line number +...
 	    nohup $MY_EMACS "$@" > /dev/null 2>&1 &
-        nircmd.exe win activate stitle "(GNU Emacs) `basename ${2}`"
+#        nircmd.exe win activate stitle "(GNU Emacs) `basename ${2}`"
     elif [ $# -eq 1 ]; then
         nohup $MY_EMACS "$@" > /dev/null 2>&1 &
-        nircmd.exe win activate stitle "(GNU Emacs) `basename ${1}`"
+#        nircmd.exe win activate stitle "(GNU Emacs) `basename ${1}`"
     else
         nohup $MY_EMACS > /dev/null 2>&1 &
     fi

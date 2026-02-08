@@ -41,7 +41,6 @@ if ! emacsclient -a /bin/false -e '()' > /dev/null 2>&1; then
         nircmd.exe win activate stitle "(GNU Emacs) `basename ${2}`"
     else
 	    nohup $MY_EMACS "$@" > /dev/null 2>&1 &
-        nircmd.exe win activate stitle "(GNU Emacs) `basename ${1}`"
     fi
 else
     if [[ "$1" == "-" ]]; then
@@ -59,7 +58,6 @@ else
         # when opening a bunch of files with emacsclient don't -n;
         # wait until each file is marked as done with C-x #
 	    emacsclient -u -c "$@"
-        nircmd.exe win activate stitle "(GNU Emacs) `basename ${1}`"
     fi
 fi
 

@@ -36,20 +36,24 @@ if ! emacsclient -a /bin/false -e '()' > /dev/null 2>&1; then
         # the first argument is a line number +...
 	    nohup $MY_EMACS "$@" > /dev/null 2>&1 &
         nircmd.exe win activate stitle "(GNU Emacs) `basename ${2}`"
-    else
+    elif [ $# -eq 1 ]; then
         nohup $MY_EMACS "$@" > /dev/null 2>&1 &
         nircmd.exe win activate stitle "(GNU Emacs) `basename ${1}`"
+    else
+        nohup $MY_EMACS > /dev/null 2>&1 &
     fi
 else
     if [ $# -eq 2 ]; then
         # we're assuming the first argument is a line number +...
 	    emacsclient -u -c -n "$@"
         nircmd.exe win activate stitle "(GNU Emacs) `basename ${2}`"
-    else
+    elif [ $# -eq 1 ]; then
         # when opening a bunch of files with emacsclient don't -n;
         # wait until each file is marked as done with C-x #
-	    emacsclient -u -c "$@"
+	    emacsclient -u -c -n "$@"
         nircmd.exe win activate stitle "(GNU Emacs) `basename ${1}`"
+    else
+        emacsclient -u -c -n
     fi
 fi
 

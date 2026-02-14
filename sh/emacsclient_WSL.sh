@@ -51,7 +51,9 @@ else
         nircmd.exe win activate stitle "(GNU Emacs) `basename ${2}`)"
     elif [ $# -eq 1 ]; then
 	    emacsclient -u -c -n "$1"
-        nircmd.exe win activate stitle "(GNU Emacs) `basename ${1}`"        
+        nircmd.exe win activate stitle "(GNU Emacs) `basename ${1}`"
+    elif [ $# -eq 0 ]; then
+        emacsclient -u -c -n
     else
         # when opening a bunch of files with emacsclient don't -n;
         # wait until each file is marked as done with C-x #

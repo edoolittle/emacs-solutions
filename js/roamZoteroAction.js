@@ -143,8 +143,10 @@ if (useNoteLink && item?.isNote() && Zotero.BetterNotes) {
 }
 
 // TODO: not sure that we need to add the link to the clipboard for this
-// application, but let's keep doing it for now.
+// application.  Let's stop doing it for now so we can use the clipboard
+// for other things like Mathpix
 
+/*
 // Format the link and copy it to the clipboard
 const clipboard = new Zotero.ActionsTags.api.utils.ClipboardHelper();
 if (linkType == "html") {
@@ -153,7 +155,8 @@ if (linkType == "html") {
   clipboard.addText(`[${linkText}](${uri})`, "text/unicode");
 } else {
   clipboard.addText(uri, "text/unicode");
-}
+  }
+*/
 
 // Now we begin with Emacs for Org-Roam script, with a few modifications
 
@@ -166,22 +169,25 @@ return await sendAnnotationToOrgRoam(item);
 // Asynchronously call the function to send the annotation to org-roam.
 
 async function sendAnnotationToOrgRoam(annotationItem) {
-  if (!annotationItem.annotationText) return "[Action: Send to org-roam] No text found in this annotation.";
-  // If there is no text in the annotation, return a message.
+    // If there is no text in the annotation, return a message.
+    // Shut this off, there may be no text in scientific PDFs
+    //if (!annotationItem.annotationText) return "[Action: Send to org-roam] No text found in this annotation.";
 
     const Zotero = require("Zotero");
     const Zotero_Tabs = require("Zotero_Tabs");
-    const itemID = Zotero_Tabs._tabs[Zotero_Tabs.selectedIndex].data.itemID;
+    
     // Get the ID of the currently selected item.
-
+    const itemID = Zotero_Tabs._tabs[Zotero_Tabs.selectedIndex].data.itemID;
     const articleItem = Zotero.Items.get(itemID);
-    const annotationText = annotationItem.annotationText + " [" + annotationItem.parentItem.parentItem.getField('citationKey') + ", p." + annotationItem.annotationPageLabel + " (check)] Annotation Comment: " + annotationItem.annotationComment ;
-  // TODO: maybe include comment as well?
-  const documentTitle = articleItem.getField("title") || "Untitled Document";
-  // Get the title of the article; if no title is available, set it to
-  // "Untitled Document".
+    
+    // Grab annotation text including comment
+    const annotationText = "\n" + annotationItem.annotationText + " [" + annotationItem.parentItem.parentItem.getField('citationKey') + ", p." + annotationItem.annotationPageLabel + " (check)]\nAnnotation Comment: " + annotationItem.annotationComment + "\n";
 
-  const formattedAnnotation = formatForOrgRoam(documentTitle, annotationText);
+    // Get the title of the article; if no title is available, set it to
+    // "Untitled Document".
+    const documentTitle = articleItem.getField("title") || "Untitled Document";
+
+    const formattedAnnotation = formatForOrgRoam(documentTitle, annotationText);
   // Format the annotation content for org-roam.
 
   const result = await pushToOrgRoam(formattedAnnotation, documentTitle);

@@ -1,3 +1,5 @@
+// THIS SCRIPT DOESN'T WORK. HOW DO I PASTE FROM CLIPBOARD TO THIS PROGRAM?
+
 /**
  * A description of this script.
  * @author edoolittle@firstnationsuniversity.ca
@@ -145,6 +147,7 @@ if (useNoteLink && item?.isNote() && Zotero.BetterNotes) {
 // TODO: not sure that we need to add the link to the clipboard for this
 // application, but let's keep doing it for now.
 
+/* Don't mess with the clipboard as we are using its contents below
 // Format the link and copy it to the clipboard
 const clipboard = new Zotero.ActionsTags.api.utils.ClipboardHelper();
 if (linkType == "html") {
@@ -153,7 +156,8 @@ if (linkType == "html") {
   clipboard.addText(`[${linkText}](${uri})`, "text/unicode");
 } else {
   clipboard.addText(uri, "text/unicode");
-}
+  }
+*/
 
 // Now we begin with Emacs for Org-Roam script, with a few modifications
 
@@ -166,7 +170,8 @@ return await sendAnnotationToOrgRoam(item);
 // Asynchronously call the function to send the annotation to org-roam.
 
 async function sendAnnotationToOrgRoam(annotationItem) {
-  if (!annotationItem.annotationText) return "[Action: Send to org-roam] No text found in this annotation.";
+  // We don't care if there's not text in the annotation
+  // if (!annotationItem.annotationText) return "[Action: Send to org-roam] No text found in this annotation.";
   // If there is no text in the annotation, return a message.
 
     const Zotero = require("Zotero");
@@ -175,8 +180,14 @@ async function sendAnnotationToOrgRoam(annotationItem) {
     // Get the ID of the currently selected item.
 
     const articleItem = Zotero.Items.get(itemID);
-    const annotationText = annotationItem.annotationText + " [" + annotationItem.parentItem.parentItem.getField('citationKey') + ", p." + annotationItem.annotationPageLabel + " (check)] Annotation Comment: " + annotationItem.annotationComment ;
-  // TODO: maybe include comment as well?
+    const clipboard = new Zotero.ActionsTags.api.utils.ClipboardHelper();
+
+    const annotationText = annotationItem.annotationText + " ["
+          + annotationItem.parentItem.parentItem.getField('citationKey')
+          + ", p." + annotationItem.annotationPageLabel
+          + " (check)]\nAnnotation Comment: "
+          + annotationItem.annotationComment
+          + "\nClipboard Contents: " + clipboard.getText()
   const documentTitle = articleItem.getField("title") || "Untitled Document";
   // Get the title of the article; if no title is available, set it to
   // "Untitled Document".

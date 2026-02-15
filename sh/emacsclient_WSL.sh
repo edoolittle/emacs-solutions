@@ -25,6 +25,8 @@
 
 #MY_EMACS='/usr/bin/emacs-w32'
 MY_EMACS='emacs'
+#RAISE_CMD='nircmd.exe win activate stitle'
+RAISE_CMD='cmd.exe /c raiseWindow.ahk'
 
 # Undocumented behaviour: emacsclient -a /bin/false returns false
 # if there is no emacs running, otherwise returns true
@@ -45,13 +47,13 @@ else
         TMP="$(mktemp /tmp/emacsstdinXXX)";
         cat >"$TMP";
         emacsclient -u -c -n -e "(let ((b (create-file-buffer \"*stdin*\"))) (switch-to-buffer b) (insert-file-contents \"${TMP}\") (delete-file \"${TMP}\"))"
-        nircmd.exe win activate stitle "\*stdin\*"
+        $RAISE_CMD "\*stdin\*"
     elif [ $# -eq 2 ]; then
  	    emacsclient -u -c -n -e "(split-window-2-files \"$1\" \"$2\")"
-        nircmd.exe win activate stitle "(GNU Emacs) `basename ${2}`)"
+        $RAISE_CMD "(GNU Emacs) `basename ${2}`" > /dev/null 2>&1 
     elif [ $# -eq 1 ]; then
 	    emacsclient -u -c -n "$1"
-        nircmd.exe win activate stitle "(GNU Emacs) `basename ${1}`"
+        $RAISE_CMD "(GNU Emacs) `basename ${1}`" > /dev/null 2>&1
     elif [ $# -eq 0 ]; then
         emacsclient -u -c -n
     else

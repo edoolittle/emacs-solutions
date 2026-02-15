@@ -26,6 +26,8 @@
 
 #MY_EMACS='/usr/bin/emacs-w32'
 MY_EMACS='emacs'
+#RAISE_CMD='nircmd.exe win activate stitle'
+RAISE_CMD='cmd.exe /c raiseWindow.ahk'
 
 # Undocumented behaviour: emacsclient -a /bin/false returns false
 # if there is no emacs running, otherwise returns true
@@ -45,10 +47,10 @@ else
     if [ $# -eq 2 ]; then
         # We're assuming the first argument is a line number +...
 	    emacsclient -u -c -n "$@"
-        nircmd.exe win activate stitle "(GNU Emacs) `basename ${2}`"
+        $RAISE_CMD "(GNU Emacs) `basename ${2}`" > /dev/null 2>&1 
     elif [ $# -eq 1 ]; then
 	    emacsclient -u -c -n "$@"
-        nircmd.exe win activate stitle "(GNU Emacs) `basename ${1}`"
+        $RAISE_CMD "(GNU Emacs) `basename ${1}`" > /dev/null 2>&1
     else
         # Unexpected, just pass it on to emacsclient
         emacsclient -u -c -n "$@"

@@ -49,7 +49,7 @@ else
         emacsclient -u -c -n -e "(let ((b (create-file-buffer \"*stdin*\"))) (switch-to-buffer b) (insert-file-contents \"${TMP}\") (delete-file \"${TMP}\"))"
         $RAISE_CMD "\*stdin\*"
     elif [ $# -eq 2 ]; then
- 	    emacsclient -u -c -n -e "(split-window-2-files \"$1\" \"$2\")"
+        emacsclient -u -c -n -e "(split-window-2-files \"$1\" \"$2\")"
         $RAISE_CMD "(GNU Emacs) `basename ${2}`" > /dev/null 2>&1 
     elif [ $# -eq 1 ]; then
 	    emacsclient -u -c -n "$1"

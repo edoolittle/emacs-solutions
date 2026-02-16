@@ -1,9 +1,25 @@
 ; raiseWindow.ahk
-; activates the window on the command line
+; activates the windows matching ^A_Args[1] in z-order
 
-if A_Args.Length > 0 {
-    if WinExist(A_Args[1]) {
-        WinActivate(A_Args[1])
+SetTitleMatchMode 1 ; to emulate the behaviour of nircmd ... stitle ...
+
+ActivateAllReversed(pattern := "") {
+    hwnds := WinGetList(pattern)
+
+    for index, hwnd in hwnds {
+        try WinActivate(hwnds[hwnds.Length-index+1])
+        Sleep(100) ; delay in milliseconds
     }
 }
+
+if A_Args.Length > 0 {
+   if WinExist(A_Args[1]) {
+       ActivateAllReversed(A_Args[1])
+   }
+} else {
+   ActivateAllReversed()
+}
+
+
+
 

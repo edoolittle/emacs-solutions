@@ -28,38 +28,47 @@ MY_EMACS='emacs'
 #RAISE_CMD='nircmd.exe win activate stitle'
 RAISE_CMD='cmd.exe /c raiseWindow.ahk'
 
+is_graphical() {
+    [[ -n "$DISPLAY" ]] && return 0
+    [[ -n "$WAYLAND_DISPLAY" ]] && return 0
+    [[ -n "$XDG_CURRENT_DESKTOP" ]] && return 0
+    [[ -n "$DESKTOP_SESSION" ]] && return 0
+    return 1
+}
+
 # Undocumented behaviour: emacsclient -a /bin/false returns false
 # if there is no emacs running, otherwise returns true
 # See https://www.emacswiki.org/emacs/EmacsPipe
 
 if ! emacsclient -a /bin/false -e '()' > /dev/null 2>&1; then
-    if [[ "$1" == "-" ]]; then
-        TMP="$(mktemp /tmp/emacsstdinXXX)";
-        cat >"$TMP";
-       	nohup $MY_EMACS --eval "(let ((b (create-file-buffer \"*stdin*\"))) (switch-to-buffer b) (insert-file-contents \"${TMP}\") (delete-file \"${TMP}\"))" > /dev/null 2>&1 &
-    elif [ $# -eq 2 ]; then
-	    nohup $MY_EMACS --eval "(split-window-2-files \"$1\" \"$2\")" > /dev/null 2>&1 &
-    else
-	    nohup $MY_EMACS "$@" > /dev/null 2>&1 &
-    fi
-else
-    if [[ "$1" == "-" ]]; then
-        TMP="$(mktemp /tmp/emacsstdinXXX)";
-        cat >"$TMP";
-        emacsclient -u -c -n -e "(let ((b (create-file-buffer \"*stdin*\"))) (switch-to-buffer b) (insert-file-contents \"${TMP}\") (delete-file \"${TMP}\"))"
-        $RAISE_CMD "\*stdin\*"
-    elif [ $# -eq 2 ]; then
-        emacsclient -u -c -n -e "(split-window-2-files \"$1\" \"$2\")"
-        $RAISE_CMD "(GNU Emacs) `basename ${2}`" > /dev/null 2>&1 
-    elif [ $# -eq 1 ]; then
-	    emacsclient -u -c -n "$1"
-        $RAISE_CMD "(GNU Emacs) `basename ${1}`" > /dev/null 2>&1
-    elif [ $# -eq 0 ]; then
-        emacsclient -u -c -n
-    else
-        # when opening a bunch of files with emacsclient don't -n;
-        # wait until each file is marked as done with C-x #
-	    emacsclient -u -c "$@"
-    fi
+    emacs --daemon > /dev/null 2>&1
 fi
+
+if is_graphical; then
+    MY_EMACSCLIENT="emacsclient -c -n"
+    MY_EMACSCLIENT_WAIT="emacsclient -c"
+else
+    MY_EMACSCLIENT="emacsclient -t"
+    MY_EMACSCLIENT_WAIT="emacsclient -t"
+fi
+
+if [[ "$1" == "-" ]]; then
+    TMP="$(mktemp /tmp/emacsstdinXXX)";
+    cat >"$TMP";
+    $MY_EMACSCLIENT -u -e "(let ((b (create-file-buffer \"*stdin*\"))) (switch-to-buffer b) (insert-file-contents \"${TMP}\") (delete-file \"${TMP}\"))"
+    #$RAISE_CMD "\*stdin\*"
+elif [ $# -eq 2 ]; then
+    $MY_EMACSCLIENT -u -e "(split-window-2-files \"$1\" \"$2\")"
+    #$RAISE_CMD "(GNU Emacs) `basename ${2}`" > /dev/null 2>&1 
+elif [ $# -eq 1 ]; then
+	$MY_EMACSCLIENT -u "$1"
+    #$RAISE_CMD "(GNU Emacs) `basename ${1}`" > /dev/null 2>&1
+elif [ $# -eq 0 ]; then
+    $MY_EMACSCLIENT -u 
+else
+    # when opening a bunch of files with emacsclient don't -n;
+    # wait until each file is marked as done with C-x #
+	$MY_EMACSCLIENT_WAIT -u "$@"
+fi
+
 

@@ -17,38 +17,55 @@
 
 #MY_EMACS="/Applications/MacPorts/EmacsMac.app/Contents/MacOS/Emacs"
 MY_EMACS="/Applications/Emacs.app/Contents/MacOS/Emacs"
-MY_EMACSCLIENT="/Applications/Emacs.app/Contents/MacOS/bin/emacsclient"
+#MY_EMACSCLIENT="/Applications/Emacs.app/Contents/MacOS/bin/emacsclient"
 #MACOS_EMACS=yes
 
+is_graphical() {
+    [[ -n "$DISPLAY" ]] && return 0
+    [[ -n "$WAYLAND_DISPLAY" ]] && return 0
+    [[ -n "$XDG_CURRENT_DESKTOP" ]] && return 0
+    [[ -n "$DESKTOP_SESSION" ]] && return 0
+    return 1
+}
 
 # Undocumented behaviour: emacsclient -a /bin/false returns false
 # if there is no emacs running, otherwise returns true
 # See https://www.emacswiki.org/emacs/EmacsPipe
 
-if ! $MY_EMACSCLIENT -a /bin/false -e '()' > /dev/null 2>&1; then
+if ! /Applications/Emacs.app/Contents/MacOS/bin/emacsclient -a /bin/false -e '()' > /dev/null 2>&1; then
     $MY_EMACS --daemon > /dev/null 2>&1
+fi
+
+if is_graphical; then
+    MY_EMACSCLIENT="/Applications/Emacs.app/Contents/MacOS/bin/emacsclient -c -n"
+    MY_EMACSCLIENT_WAIT="/Applications/Emacs.app/Contents/MacOS/bin/emacsclient -c"
+else
+    MY_EMACSCLIENT="/Applications/Emacs.app/Contents/MacOS/bin/emacsclient -t"
+    MY_EMACSCLIENT_WAIT="/Applications/Emacs.app/Contents/MacOS/bin/emacsclient -t"
 fi
 
 if [[ "$1" == "-" ]]; then
     TMP="$(mktemp /tmp/emacsstdinXXX)";
     cat >"$TMP";
-    $MY_EMACSCLIENT -u -c -n -e "(let ((b (create-file-buffer \"*stdin*\"))) (switch-to-buffer b) (insert-file-contents \"${TMP}\") (delete-file \"${TMP}\"))"
+    $MY_EMACSCLIENT -u -e "(let ((b (create-file-buffer \"*stdin*\"))) (switch-to-buffer b) (insert-file-contents \"${TMP}\") (delete-file \"${TMP}\"))"
     #$RAISE_CMD "\*stdin\*"
 elif [ $# -eq 2 ]; then
-    $MY_EMACSCLIENT -u -c -n -e "(split-window-2-files \"$1\" \"$2\")"
+    $MY_EMACSCLIENT -u -e "(split-window-2-files \"$1\" \"$2\")"
     #$RAISE_CMD "(GNU Emacs) `basename ${2}`" > /dev/null 2>&1
 elif [ $# -eq 1 ]; then
-	$MY_EMACSCLIENT -u -c -n "$1"
+	$MY_EMACSCLIENT -u  "$1"
     #$RAISE_CMD "(GNU Emacs) `basename ${1}`" > /dev/null 2>&1
 elif [ $# -eq 0 ]; then
-    $MY_EMACSCLIENT -u -c -n
+    $MY_EMACSCLIENT -u 
 else
     # when opening a bunch of files with emacsclient don't -n;
     # wait until each file is marked as done with C-x #
-	$MY_EMACSCLIENT -u -c "$@"
+	$MY_EMACSCLIENT_WAIT -u "$@"
 fi
 
-osascript -e 'tell application "System Events" to click UI element "Emacs" of list 1 of application process "Dock"' > /dev/null 2>&1
+if is_graphical; then
+    osascript -e 'tell application "System Events" to click UI element "Emacs" of list 1 of application process "Dock"' > /dev/null 2>&1
+fi
 
 
 

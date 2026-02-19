@@ -73,7 +73,7 @@ else
 fi
 
 if is_ssh; then
-    # NOP
+    : # NOP
 else
     osascript -e 'tell application "System Events" to click UI element "Emacs" of list 1 of application process "Dock"' > /dev/null 2>&1
 fi

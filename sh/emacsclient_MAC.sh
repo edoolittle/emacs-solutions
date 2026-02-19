@@ -28,6 +28,15 @@ is_graphical() {
     return 1
 }
 
+is_ssh() {
+    # Detect if running over SSH
+    if [[ -n "$SSH_CLIENT" ]] || [[ -n "$SSH_TTY" ]]; then
+        return 1
+    else
+        return 0
+    fi
+}
+
 # Undocumented behaviour: emacsclient -a /bin/false returns false
 # if there is no emacs running, otherwise returns true
 # See https://www.emacswiki.org/emacs/EmacsPipe
@@ -36,12 +45,12 @@ if ! /Applications/Emacs.app/Contents/MacOS/bin/emacsclient -a /bin/false -e '()
     $MY_EMACS --daemon > /dev/null 2>&1
 fi
 
-if is_graphical; then
-    MY_EMACSCLIENT="/Applications/Emacs.app/Contents/MacOS/bin/emacsclient -c -n"
-    MY_EMACSCLIENT_WAIT="/Applications/Emacs.app/Contents/MacOS/bin/emacsclient -c"
-else
+if is_ssh; then
     MY_EMACSCLIENT="/Applications/Emacs.app/Contents/MacOS/bin/emacsclient -t"
     MY_EMACSCLIENT_WAIT="/Applications/Emacs.app/Contents/MacOS/bin/emacsclient -t"
+else
+    MY_EMACSCLIENT="/Applications/Emacs.app/Contents/MacOS/bin/emacsclient -c -n"
+    MY_EMACSCLIENT_WAIT="/Applications/Emacs.app/Contents/MacOS/bin/emacsclient -c"
 fi
 
 if [[ "$1" == "-" ]]; then
@@ -63,7 +72,9 @@ else
 	$MY_EMACSCLIENT_WAIT -u "$@"
 fi
 
-if is_graphical; then
+if is_ssh; then
+    # NOP
+else
     osascript -e 'tell application "System Events" to click UI element "Emacs" of list 1 of application process "Dock"' > /dev/null 2>&1
 fi
 

@@ -31,9 +31,9 @@ is_graphical() {
 is_ssh() {
     # Detect if running over SSH
     if [[ -n "$SSH_CLIENT" ]] || [[ -n "$SSH_TTY" ]]; then
-        return 1
-    else
         return 0
+    else
+        return 1
     fi
 }
 

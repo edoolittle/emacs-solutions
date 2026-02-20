@@ -19,7 +19,7 @@ MY_EMACSCLIENT='emacsclient'
 # emacsclient should start with -t option for text terminal
 is_ssh() {
     # Detect if running over SSH
-    if [[ -n "$SSH_CLIENT" ]] || [[ -n "$SSH_TTY" ]]; then
+    if [[ -n "$SSH_CONNECTION" ]] || [[ -n "$SSH_CLIENT" ]] || [[ -n "$IS_SSH" ]]; then
         return 0
     else
         return 1

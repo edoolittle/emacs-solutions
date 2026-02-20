@@ -39,7 +39,8 @@ fi
 # if there is no emacs running, otherwise returns true
 # See https://www.emacswiki.org/emacs/EmacsPipe
 if ! $MY_EMACSCLIENT -a /bin/false -e '()' > /dev/null 2>&1; then
-    $MY_EMACS --daemon > /dev/null 2>&1
+    #$MY_EMACS --daemon > /dev/null 2>&1
+    $MY_EMACS --daemon
 fi
 
 if [[ "$1" == "-" ]]; then

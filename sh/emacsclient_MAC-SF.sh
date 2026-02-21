@@ -31,11 +31,11 @@ if ! $MY_EMACSCLIENT -a /bin/false -e '()' > /dev/null 2>&1; then
     $MY_EMACS --daemon > /dev/null 2>&1
 fi
 
-$MY_EMACSCLIENT $EMC_NOWAIT "$@"
-
 if is_ssh; then
     : # NOP
 else
     osascript -e 'tell application "System Events" to click UI element "Emacs" of list 1 of application process "Dock"' > /dev/null 2>&1
 fi
+
+$MY_EMACSCLIENT $EMC_WAIT "$@"
 

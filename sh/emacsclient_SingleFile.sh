@@ -31,5 +31,5 @@ if ! $MY_EMACSCLIENT -a /bin/false -e '()' > /dev/null 2>&1; then
     $MY_EMACS --daemon > /dev/null 2>&1
 fi
 
-$MY_EMACSCLIENT $EMC_NOWAIT "$@"
+$MY_EMACSCLIENT $EMC_WAIT "$@"
 

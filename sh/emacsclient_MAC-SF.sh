@@ -8,7 +8,7 @@ MY_EMACSCLIENT='emacsclient'
 # Determine whether we're running in an SSH session, in which case
 # emacsclient should start with -t option for text terminal
 is_ssh() {
-    if [[ -n "$SSH_CLIENT" ]] || [[ -n "$SSH_TTY" ]]; then
+    if [[ -n "$SSH_CONNECTION" ]] || [[ -n "$SSH_CLIENT" ]] || [[ -n "$IS_SSH" ]]; then
         return 0
     else
         return 1

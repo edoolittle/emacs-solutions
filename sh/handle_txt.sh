@@ -1,5 +1,6 @@
 #!/bin/bash
 
+EMACS="emacs"
 LOG=FALSE
 LOGFILE="$HOME/log.txt"
 
@@ -14,12 +15,20 @@ wait() {
     read
 }
 
+# if emacs is not running, my preference is to run in daemon mode
+# comment out the lines below if you would rather not
+if ! emacsclient -a /bin/false -e '()' > /dev/null 2>&1; then
+    log "Starting $EMACS in daemon mode..."
+    #$EMACS --daemon
+    $EMACS --daemon > /dev/null 2>&1
+fi
+
 # wsl distribution name
 SELF=$(basename "$(wslpath -m /)" | tr '[:upper:]' '[:lower:]')
 
 # no file provided, just open emacs
 if [ $# -eq 0 ]; then
-    nohup emacsclient -a /usr/bin/emacs -c -n >/dev/null 2>&1 &
+    nohup emacsclient -a "$EMACS" -c -n >/dev/null 2>&1
     exit 0
 fi
 
@@ -57,7 +66,7 @@ for winpath in "$@"; do
         continue
     fi
 
-    nohup emacsclient -a /usr/bin/emacs -c -n "$linuxpath" >/dev/null 2>&1 &
+    nohup emacsclient -a "$EMACS" -c -n "$linuxpath" >/dev/null 2>&1 
 
 done
 

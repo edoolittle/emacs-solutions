@@ -71,4 +71,4 @@ for winpath in "$@"; do
 done
 
 log "Finished"
-sleep 1
+

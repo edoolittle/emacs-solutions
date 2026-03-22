@@ -17,6 +17,7 @@ wait() {
 
 # if emacs is not running, my preference is to run in daemon mode
 # comment out the lines below if you would rather not
+# You also may wish to log the emacs startup messages
 if ! emacsclient -a /bin/false -e '()' > /dev/null 2>&1; then
     log "Starting $EMACS in daemon mode..."
     #$EMACS --daemon
